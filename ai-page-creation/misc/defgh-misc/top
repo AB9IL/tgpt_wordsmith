@@ -1,0 +1,13 @@
+<?php
+
+//REQUIRE FUNCTIONS
+require_once 'functions.php';
+
+$title="";
+$description="";
+$showads=True;
+$showindex=True;
+$pagetitle=$title;
+$content=<<<OUT
+
+
