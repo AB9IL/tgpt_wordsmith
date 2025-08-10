@@ -1,0 +1,5 @@
+considerations and best practices for setting up 1) solar power, or 2) battery power to operate an antenna mast mounted software defined radio receiver
+performance factors for understanding whether a LNA and software defined radio receiver perform better if mounted at the antenna or if the LNA and radio may be separated by a long coaxial cable
+considerations and best practices for stopping the antenna mast mounted software defined radio receiver from drifting in frequency in hot or cold weather
+considerations and best practices for preventing rain and water condensation from harming the circuitry of an outdoor intsalled software defined radio receiver
+considerations and best practices for preventing spiders and wasps from building nests in the container for an outdoor mounted software defined radio receiver
