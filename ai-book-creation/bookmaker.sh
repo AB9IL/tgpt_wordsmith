@@ -12,8 +12,16 @@
 # tgpt.
 
 export PROV_NAME="phind"
-export BOOKDATA=(book-01 book-02)
-export TGPT="/usr/local/src/gotgpt/tgpt-linux-amd64"
+export BOOKDATA=(book-*)
+TGPT_PATH="/usr/local/src/gotgpt/tgpt-linux-amd64"
+
+###############################################################################
+# DRAGONS BELOW!
+###############################################################################
+
+# put a link to tgpt into the path if not already existing
+[ -z "$(which tgpt)" ] && ln -sf $TGPT_PATH "$HOME"/.local/bin/tgpt
+export TGPT="tgpt"
 
 make_chapter() {
     # 1 - sequentially read notes within each chapter
@@ -24,16 +32,18 @@ make_chapter() {
         # TIME="$(date +"%Y-%m-%d_%H-%M-%S")"
         echo "Working on $CHAPTER and item $X"
         read -rd '' NOTE <<<"$(\cat "$K")"
-        PROMPT="Create an essay according to the following criteria:
+
+        PROMPT="Create an essay in plain text according to the following criteria:
         1) formatted in paragraphs, 2) styled in a narrative (storytelling)
         format, 3) avoid numbered or bullet pointed lists, 4) focus on
-        subject matter in this markdown snippet:
-        $NOTE"
+        subject matter in the following markdown formatted snippet: $NOTE"
+
         # random delay befor querying AI service
         sleep "$DELAY"
-        CONTENT="$($TGPT --provider "${PROV_NAME}" "${PROMPT}")"
+        CONTENT="$("$TGPT" --provider "${PROV_NAME}" "${PROMPT}")"
 
-        echo -e "$CONTENT" >>"${CHAPTER}.txt"
+        # append results to the chapter
+        echo -e "$CONTENT" >>"output/${CHAPTER}".txt
         ((X++))
     done
 }
@@ -43,7 +53,10 @@ for BOOK in "${BOOKDATA[@]}"; do
     echo -e "\nWorking on $BOOK ...\n"
     CHAPTERS=("$BOOK"/*)
     for CHAPTER in "${CHAPTERS[@]}"; do
-        sem -j4 make_chapter
+        export CHAPTER
+        [ -d "output/$BOOK" ] || mkdir "output/$BOOK"
+        sem -j 4 make_chapter
     done
-    wait
+    echo -e "Book $BOOK complete!\n"
 done
+echo -e "All boks complete! \n"

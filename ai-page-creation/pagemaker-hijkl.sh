@@ -30,7 +30,15 @@ TOPICS_FILE="topics"                          # broader subject to discuss
 ITEMS_FILE="items"                            # more specific topics
 TOP_DATA="$(<misc/$SITE_CODE-misc/top)"       # generic top of page
 BOTTOM_DATA="$(<misc/$SITE_CODE-misc/bottom)" # generic bottom of page
-export TGPT="/usr/local/src/gotgpt/tgpt-linux-amd64"
+TGPT_PATH="/usr/local/src/gotgpt/tgpt-linux-amd64"
+
+###############################################################################
+# DRAGONS BELOW!
+###############################################################################
+
+# put a link to tgpt into the path if not already existing
+[ -z "$(which tgpt)" ] && ln -sf $TGPT_PATH "$HOME"/.local/bin/tgpt
+export TGPT="tgpt"
 
 # create an output directory if it does not exist
 [ -d "$OUTPUTPATH" ] || mkdir $OUTPUTPATH
